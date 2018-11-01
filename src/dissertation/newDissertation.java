@@ -23,28 +23,42 @@ public class newDissertation {
         {true, true, true, true, true, false, true}};
 
     // Three groups, known as 0-2, hence why I have to subtract one from this value
-    static int noRows = groupArray.length;
+    static int noGroups = groupArray.length;
 
     // Define the equation variables
     static double Nc, N; // Number of Cooperators (Nc) & Number of individuals (N)
     static double R = 2.0; // Multiplication Value
     static double C = 10.0; // Cost of contribution
 
-    public void calculatePayoff() {
-        // PC = (r * Nc * C) / N;
-        // PD = PC - C
-
-    }
+    // Variables for my various methods
+    static int randomIndividual;
+    static int noIndividuals = groupArray[0].length; // Second dimension
 
     public static void chooseRandom() {
         Random rand = new Random();
-        int[] randomArray = new int[7];
+        int memberOf = 0;
+        int testVal = 0;
+        //int hardCodeVal = 6;
 
-        // Choose a random invidual 7 times
-        for (int i = 0; i < 7; i++) {
-            int randomIndividual = rand.nextInt(7) + 0;
-            randomArray[i] = randomIndividual;
-        }
+            randomIndividual = rand.nextInt(7) + 0;
+            while (testVal < noGroups) {
+                if (groupArray[testVal][randomIndividual] == true) {
+                    memberOf++;
+                }
+                testVal++;
+            }
+
+        char checkStrategy = strategyArray[randomIndividual];
+
+        System.out.println("Individual " + randomIndividual);
+        System.out.println("Strategy: " + checkStrategy);
+        System.out.println("Member of: " + memberOf + " groups");
+
+    }
+
+    public static void calculatePayoff() {
+        double PC = (R * Nc * C) / N;
+        double PD = PC - C;
     }
 
     public static void main(String[] args) {
