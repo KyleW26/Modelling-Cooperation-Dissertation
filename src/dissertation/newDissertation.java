@@ -29,32 +29,53 @@ public class newDissertation {
     static double Nc, N; // Number of Cooperators (Nc) & Number of individuals (N)
     static double R = 2.0; // Multiplication Value
     static double C = 10.0; // Cost of contribution
+    static double payoffCoopG0, payoffDefecG0, payoffCoopG1, payoffDefecG1, payoffCoopG2, payoffDefecG2;
 
     // Variables for my various methods
-    static int randomIndividual;
+    static int randomIndividual; // Initialised in the chooseRandom method
     static int noIndividuals = groupArray[0].length; // Second dimension
-    static int whileVar, testVal;
+    static int whileVar, testVal; // Loop vars
+    static int testTrue = 0;
 
     public static void chooseRandom() {
         Random rand = new Random();
         int memberOf = 0;
-        //int hardCodeVal = 6;
 
         randomIndividual = rand.nextInt(7) + 0;
         while (testVal < noGroups) {
             if (groupArray[testVal][randomIndividual] == true) {
-                calculateGroup();
+                //calculateGroup();
                 memberOf++;
             }
             testVal++;
         }
 
+        System.out.println("Individual " + randomIndividual);
         // Check the strategy of the randomIndividual
         char checkStrategy = strategyArray[randomIndividual];
 
-        System.out.println("Individual " + randomIndividual);
         System.out.println("Strategy: " + checkStrategy);
         System.out.println("Member of: " + memberOf + " groups");
+        System.out.println(" ");
+
+        if (groupArray[0][randomIndividual] == true) {
+            //System.out.println("Individual " + randomIndividual + " is a member of group 0.");
+            while (whileVar < 7) {
+                if (groupArray[0][whileVar] == true) {
+                    testTrue++;
+                    if (strategyArray[testTrue] == 'C') {
+                        Nc++;
+                    }
+                }
+                whileVar++;
+            }
+            N = testTrue;
+
+            payoffCoopG0 = (R * Nc * C) / N;
+            payoffDefecG0 = payoffCoopG0 - C;
+            System.out.println("Group 0 Cooperator payoff: " + payoffCoopG0);
+            System.out.println("Group 0 Defector payoff: " + payoffDefecG0);
+        }
 
     }
 
@@ -74,9 +95,9 @@ public class newDissertation {
         }
         N = testTrue;
 
-        System.out.println("Group: "+testVal);
-        System.out.println("No. of Individuals: "+N);
-        System.out.println("No. of Cooperators: "+Nc);
+        System.out.println("Group: " + testVal);
+        System.out.println("No. of Individuals: " + N);
+        System.out.println("No. of Cooperators: " + Nc);
         System.out.println(" ");
         calculatePayoff();
     }
@@ -90,9 +111,9 @@ public class newDissertation {
 
     public static void main(String[] args) {
         //System.out.println(noRows);
-        //chooseRandom();
+        chooseRandom();
         //calculatePayoff();
-        calculateGroup();
+        //calculateGroup();
     }
 
 }
