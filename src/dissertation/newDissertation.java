@@ -33,21 +33,23 @@ public class newDissertation {
     // Variables for my various methods
     static int randomIndividual;
     static int noIndividuals = groupArray[0].length; // Second dimension
+    static int whileVar, testVal;
 
     public static void chooseRandom() {
         Random rand = new Random();
         int memberOf = 0;
-        int testVal = 0;
         //int hardCodeVal = 6;
 
-            randomIndividual = rand.nextInt(7) + 0;
-            while (testVal < noGroups) {
-                if (groupArray[testVal][randomIndividual] == true) {
-                    memberOf++;
-                }
-                testVal++;
+        randomIndividual = rand.nextInt(7) + 0;
+        while (testVal < noGroups) {
+            if (groupArray[testVal][randomIndividual] == true) {
+                calculateGroup();
+                memberOf++;
             }
+            testVal++;
+        }
 
+        // Check the strategy of the randomIndividual
         char checkStrategy = strategyArray[randomIndividual];
 
         System.out.println("Individual " + randomIndividual);
@@ -56,14 +58,41 @@ public class newDissertation {
 
     }
 
+    public static void calculateGroup() {
+
+        int testTrue = 0;
+
+        // Test whether players are cooperators or defectors (BY GROUP)
+        while (whileVar < 7) {
+            if (groupArray[testVal][whileVar] == true) {
+                testTrue++;
+                if (strategyArray[testTrue] == 'C') {
+                    Nc++;
+                }
+            }
+            whileVar++;
+        }
+        N = testTrue;
+
+        System.out.println("Group: "+testVal);
+        System.out.println("No. of Individuals: "+N);
+        System.out.println("No. of Cooperators: "+Nc);
+        System.out.println(" ");
+        calculatePayoff();
+    }
+
     public static void calculatePayoff() {
         double PC = (R * Nc * C) / N;
         double PD = PC - C;
+        System.out.println("PC: " + PC);
+        System.out.println("PD: " + PD);
     }
 
     public static void main(String[] args) {
         //System.out.println(noRows);
-        chooseRandom();
+        //chooseRandom();
+        //calculatePayoff();
+        calculateGroup();
     }
 
 }
