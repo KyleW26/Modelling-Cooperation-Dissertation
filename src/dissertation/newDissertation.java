@@ -42,6 +42,7 @@ public class newDissertation {
         int memberOf = 0;
 
         randomIndividual = rand.nextInt(7) + 0;
+
         while (testVal < noGroups) {
             if (groupArray[testVal][randomIndividual] == true) {
                 //calculateGroup();
@@ -71,13 +72,29 @@ public class newDissertation {
             }
             N = testTrue;
 
-            payoffCoopG0 = (R * Nc * C) / N;
-            payoffDefecG0 = payoffCoopG0 - C;
-            System.out.println("Group 0 Cooperator payoff: " + payoffCoopG0);
-            System.out.println("Group 0 Defector payoff: " + payoffDefecG0);
-        }
+            if (groupArray[1][randomIndividual] == true) {
+                //System.out.println("Individual " + randomIndividual + " is a member of group 0.");
+                while (whileVar < 7) {
+                    if (groupArray[1][whileVar] == true) {
+                        testTrue++;
+                        if (strategyArray[testTrue] == 'C') {
+                            Nc++;
+                        }
+                    }
+                    whileVar++;
+                }
+                N = testTrue;
 
+                payoffCoopG0 = (R * Nc * C) / N;
+                payoffDefecG0 = payoffCoopG0 - C;
+                System.out.println("Group 0 Cooperator payoff: " + payoffCoopG0);
+                System.out.println("Group 0 Defector payoff: " + payoffDefecG0);
+            }
+
+        }
     }
+
+    
 
     public static void calculateGroup() {
 
@@ -111,9 +128,9 @@ public class newDissertation {
 
     public static void main(String[] args) {
         //System.out.println(noRows);
-        chooseRandom();
+        //chooseRandom();
         //calculatePayoff();
-        //calculateGroup();
+        calculateGroup();
     }
 
 }
