@@ -65,7 +65,7 @@ public class Attempt3 {
                 + memberOf[0] + " " + memberOf[1] + " " + memberOf[2]);
 
         // Iterate through memberOf array
-        for (int i = 0; i < memberOf.length; i++) {
+         for (int i = 0; i < memberOf.length; i++) {
             sum = 0;
             if (memberOf[i] == true) {
                 // Iterate through groupArray
@@ -76,23 +76,7 @@ public class Attempt3 {
                 }
             }
         }
-
-        /*int counter = 0;
-        // Groups
-        for (int i = 0; i < groupArray.length; i++) {
-            // Individuals
-            for (int j = 0; j < groupArray[1].length; j++) {
-                if (groupArray[i][j]) {
-                    counter++;
-                }
-            }
-        }
-
-        // Print the total amount of trues and falses
-        System.out.println("true: " + counter);
-        System.out.println("false: " + (groupArray[1].length * groupArray.length - counter)); */
-        
-        System.out.println(" ");
+         
         System.out.println("Random Individual: " + randomPerson);
         System.out.println("Value of N: " + N);
         System.out.println("Value of Nc: " + Nc);
