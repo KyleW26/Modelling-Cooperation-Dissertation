@@ -46,44 +46,38 @@ public class Attempt3 {
         for (int g = 0; g < groupArray.length; g++) {
             double Nc = 0;
             double N = 0;
-            double sum = 0;
+            //double sum = 0;
             // Individuals (columns)
             for (int i = 0; i < individual; i++) {
                 if (groupArray[g][i] == true) {
                     N++;
-                    if(strategyArray[i] == 'C') {
+                    if (strategyArray[i] == 'C') {
                         Nc++;
                     }
                 }
                 //System.out.println(groupArray[g][i]);
             }
-            System.out.println("N: "+N);
-            System.out.println("Nc: "+Nc);
-            //PD = (r * Nc * c)/N;
-            //PC = PD - c;
+
+            if (groupArray[g][randomPerson] == true) {
+                PD = (r * Nc * c) / N;
+                PC = PD - c;
+
+                if (strategyArray[randomPerson] == 'C') {
+                    sum += PC;
+                } else {
+                    sum += PD;
+                }
+            }
         }
+        System.out.println("Sum: " + sum);
+        System.out.println();
+
         memberOf[0] = groupArray[0][randomPerson] == true;
         memberOf[1] = groupArray[1][randomPerson] == true;
         memberOf[2] = groupArray[2][randomPerson] == true;
 
+        System.out.println("Random Individual: " + randomPerson);
         System.out.println("Individual " + randomPerson + " is a member of groups: "
                 + memberOf[0] + " " + memberOf[1] + " " + memberOf[2]);
-
-        /*// Iterate through memberOf array
-         for (int i = 0; i < memberOf.length; i++) {
-            sum = 0;
-            if (memberOf[i] == true) {
-                // Iterate through groupArray
-                for (int j = 0; j < groupArray[1].length; j++) {
-                    if (groupArray[i][j] == true) {
-                        N++;
-                    }
-                }
-            }
-        } */
-        System.out.println("Random Individual: " + randomPerson);
-        //System.out.println("Value of N: " + N);
-        //System.out.println("Value of Nc: " + Nc);
-        System.out.println("Amount of groups: " + groupArray.length); // Groups
     }
 }
