@@ -8,30 +8,43 @@ import java.util.Random;
  */
 public class Attempt3 {
 
-    static char[] strategyArray = {'C', 'D', 'C', 'C', 'C', 'D', 'D'};
+    //static char[] strategyArray = {'C', 'D', 'C', 'C', 'C', 'D', 'D'};
+    static char[] strategyArray = new char[165];
+    static boolean[][] groupArray = new boolean[10][165];
+    static int noOfIndividuals = strategyArray.length;
 
     // Generate 3 different groups
-    static boolean[][] groupArray = {
+    /*static boolean[][] groupArray = {
         {true, true, false, true, false, false, true},
         {true, false, true, true, false, false, false},
-        {true, true, true, true, true, false, true}};
-
-    static boolean memberOf[] = new boolean[3];
-
+        {true, true, true, true, true, false, true}}; */
+    
     static int randomPerson = 0; // Individual and Group
     static double r = 2.0; // Multiplication Value
-    //static double Nc = 0.0; // Number of cooperators
-    //static double N = 0.0; // Number of individuals
     static double c = 10.0; // Cost of contributions
     static double PD, PC, sum;
-    //static int coopBetter, defectorBetter;
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        generateIndividuals();
         calculateGroup();
         checkNeighbours();
+    }
+
+    public static void generateIndividuals() {
+        final String alphabet = "CD";
+        final int N = alphabet.length();
+        Random r = new Random();
+
+        for (int i = 0; i < noOfIndividuals; i++) {
+            strategyArray[i] = alphabet.charAt(r.nextInt(N));
+
+            for (int y = 0; y < groupArray.length; y++) {
+                groupArray[y][i] = r.nextBoolean();
+            }
+        }
     }
 
     // int i = individual ... int g = group
@@ -53,7 +66,7 @@ public class Attempt3 {
                 }
                 //System.out.println(groupArray[g][i]);
             }
-
+            
             if (groupArray[g][randomPerson] == true) {
                 PD = (r * Nc * c) / N;
                 PC = PD - c;
@@ -68,22 +81,20 @@ public class Attempt3 {
 
         System.out.println("Random Individual: " + randomPerson);
         System.out.println("Individual " + randomPerson + " is a " + strategyArray[randomPerson]);
-        System.out.println("Individual " + randomPerson + " is a member of groups: "
-                + memberOf[0] + " " + memberOf[1] + " " + memberOf[2]);
         System.out.println("Sum: " + sum);
     }
 
     public static void checkNeighbours() {
 
-        for (int w = 0; w < 25; w++) {
+        for (int w = 0; w < 165; w++) {
             Random rand = new Random();
-            randomPerson = rand.nextInt(7) + 0;
+            randomPerson = rand.nextInt(165) + 0;
             // Get the neighbour
             int leftNeighbour = randomPerson - 1;
             int rightNeighbour = randomPerson + 1;
 
             // Error checking
-            if (rightNeighbour >= 7) {
+            if (rightNeighbour >= 165) {
                 System.out.println("There is no neighbour on the right, checking individual 0.");
                 rightNeighbour = 0;
             }
@@ -97,6 +108,7 @@ public class Attempt3 {
             char rightNeighbourStrat = strategyArray[rightNeighbour];
 
             System.out.println();
+            System.out.println("Random Individual: " + randomPerson);
             System.out.println("Individual " + leftNeighbour + " = " + leftNeighbourStrat);
             System.out.println("Individual " + rightNeighbour + " = " + rightNeighbourStrat);
 
@@ -139,7 +151,6 @@ public class Attempt3 {
                         sumRight += PD;
                     }
                 }
-
             }
             // Print out the sums of the left & right neighbour
             System.out.println("Sum of individual " + leftNeighbour + ": " + sumLeft);
@@ -161,7 +172,6 @@ public class Attempt3 {
             }
 
             System.out.println();
-            System.out.println("Random Individual: " + randomPerson);
 
         }
     }
