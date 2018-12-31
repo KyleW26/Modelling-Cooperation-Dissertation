@@ -18,7 +18,6 @@ public class Attempt3 {
         {true, true, false, true, false, false, true},
         {true, false, true, true, false, false, false},
         {true, true, true, true, true, false, true}}; */
-    
     static int randomPerson = 0; // Individual and Group
     static double r = 2.0; // Multiplication Value
     static double c = 10.0; // Cost of contributions
@@ -45,27 +44,37 @@ public class Attempt3 {
                 groupArray[y][i] = r.nextBoolean();
             }
         }
+
+        for (int i = 0; i < groupArray.length; i++) {
+            for (int j = 0; j < noOfIndividuals; j++) {
+                System.out.print(groupArray[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 
     // int i = individual ... int g = group
     public static void calculateGroup() {
-        int individual = groupArray[0].length;
-
         // Groups (rows)
         for (int g = 0; g < groupArray.length; g++) {
             double Nc = 0;
             double N = 0;
             //double sum = 0;
             // Individuals (columns)
-            for (int i = 0; i < individual; i++) {
+            for (int i = 0; i < noOfIndividuals; i++) {
                 if (groupArray[g][i] == true) {
                     N++;
                     if (strategyArray[i] == 'C') {
                         Nc++;
                     }
                 }
-                //System.out.println(groupArray[g][i]);
             }
+
+            //WORK FROM HERE ONWARDS
+            // Gets the values group by group
+            /*System.out.println("N of group "+g+": "+N);
+            System.out.println("Nc of group "+g+": "+Nc);
+            System.out.println("Nd of group "+g+": "+(N-Nc)); */
             
             if (groupArray[g][randomPerson] == true) {
                 PD = (r * Nc * c) / N;
@@ -77,8 +86,11 @@ public class Attempt3 {
                     sum += PD;
                 }
             }
+            System.out.println("N in group "+g+": "+ N);
+            System.out.println("Nc in group "+g+": "+ Nc);
         }
 
+        System.out.println();
         System.out.println("Random Individual: " + randomPerson);
         System.out.println("Individual " + randomPerson + " is a " + strategyArray[randomPerson]);
         System.out.println("Sum: " + sum);
@@ -151,6 +163,9 @@ public class Attempt3 {
                         sumRight += PD;
                     }
                 }
+                System.out.println();
+                System.out.println("N in group "+g+": "+N);
+                System.out.println("Nc in group "+g+": "+Nc);
             }
             // Print out the sums of the left & right neighbour
             System.out.println("Sum of individual " + leftNeighbour + ": " + sumLeft);
