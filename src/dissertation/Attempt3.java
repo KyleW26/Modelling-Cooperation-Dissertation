@@ -1,6 +1,7 @@
 package dissertation;
 
 import java.util.Random;
+import java.util.Scanner;
 
 /**
  *
@@ -10,8 +11,9 @@ public class Attempt3 {
 
     static char[] strategyArray = new char[165];
     static boolean[][] groupArray = new boolean[10][165];
+    static double[] payoffArray = new double[10];
     static int noOfIndividuals = strategyArray.length;
-    static int randomPerson = 0; // Individual and Group
+    static int randomPerson;
     static double r = 10; // Multiplication Value
     static double c = 10; // Cost of contributions
     static double PD, PC;
@@ -25,7 +27,20 @@ public class Attempt3 {
         generateIndividuals();
         calculateIndividualPayoff();
         checkNeighbours();
-        offerGroupChange(sum, randomPerson);
+        offerGroupChange();
+        searchAnIndividual(); // USE FOR TESTING
+    }
+
+    public static int getMinValue(double[] payoffArray) {
+        int index = 0;
+        double min = payoffArray[index];
+        for (int i = 0; i < payoffArray.length; i++) {
+            if (payoffArray[i] < min && payoffArray[i] > 0) {
+                min = payoffArray[i];
+                index = i;
+            }
+        }
+        return index;
     }
 
     public static void generateIndividuals() {
@@ -35,7 +50,6 @@ public class Attempt3 {
 
         for (int i = 0; i < noOfIndividuals; i++) {
             strategyArray[i] = alphabet.charAt(r.nextInt(N));
-
             for (int y = 0; y < groupArray.length; y++) {
                 groupArray[y][i] = r.nextBoolean();
             }
@@ -51,6 +65,7 @@ public class Attempt3 {
 
     // int i = individual ... int g = group
     public static float calculateIndividualPayoff() {
+        randomPerson = rand.nextInt(165) + 0;
         // Groups (rows)
         for (int g = 0; g < groupArray.length; g++) {
             double Nc = 0;
@@ -65,13 +80,21 @@ public class Attempt3 {
                 }
             }
 
+            // ---------- TEST ---------- //
+//            if (groupArray[g][randomPerson] == true) {
+//                System.out.println("Random: " + randomPerson);
+//                System.out.println("Member of Group " + g);
+//            }
+//        }
             if (groupArray[g][randomPerson] == true) {
                 PD = (r * Nc * c) / N;
                 PC = PD - c;
 
                 if (strategyArray[randomPerson] == 'C') {
+                    payoffArray[g] = PC;
                     sum += PC;
                 } else if (strategyArray[randomPerson] == 'D') {
+                    payoffArray[g] = PD;
                     sum += PD;
                 }
             }
@@ -86,9 +109,8 @@ public class Attempt3 {
     }
 
     public static int checkNeighbours() {
-
         for (int w = 0; w < 165; w++) {
-            randomPerson = rand.nextInt(165) + 0;
+            //randomPerson = rand.nextInt(165) + 0;
             // Get the neighbour
             int leftNeighbour = randomPerson - 1;
             int rightNeighbour = randomPerson + 1;
@@ -184,18 +206,24 @@ public class Attempt3 {
         return randomPerson;
     }
 
-    public static void offerGroupChange(float sum, int randomPerson) {
+    public static void offerGroupChange() {
         System.out.println("-------------------");
         System.out.println("offerGroupChange...");
         System.out.println("-------------------");
-        randomPerson = rand.nextInt(165) + 0;
 
         int leftNeighbour = randomPerson - 1;
         int rightNeighbour = randomPerson + 1;
 
-        // Get the strategy
-        char leftNeighbourStrat = strategyArray[leftNeighbour];
-        char rightNeighbourStrat = strategyArray[rightNeighbour];
+        // Error checking if there is no neighbour on the right hand side
+        if (rightNeighbour >= 165) {
+            System.out.println("There is no neighbour on the right, checking individual 0.");
+            rightNeighbour = 0;
+        }
+        // Error checking if there is no neighbour on the left hand side
+        if (leftNeighbour < 0) {
+            System.out.println("There is no neighbour on the left, checking individual 0.");
+            leftNeighbour = 0;
+        }
 
         // Length of array & calculations for payoff
         int individual = groupArray[0].length;
@@ -247,27 +275,53 @@ public class Attempt3 {
         System.out.println("Sum of individual " + randomPerson + " = " + sum);
 
         int randomGroup = rand.nextInt(9) + 1;
-        int randomSecondGroup = rand.nextInt(9) + 1;
+        int min = getMinValue(payoffArray);
 
-        // Offer a chance to leave a group and join a random one
-        if (sumLeft > sum) {
-            if (groupArray[randomGroup][randomPerson] == true) {
-                System.out.println("Individual " + randomPerson + " is now leaving group " + randomGroup
-                        + " and joining group " + randomSecondGroup+", because the payoff of the left neighbour"
-                                + " was higher.");
-                groupArray[randomGroup][randomPerson] = false;
-                groupArray[randomSecondGroup][randomPerson] = true;
+        // ---------- MAIN PART OF THIS METHOD ---------- //
+        /* Offer a chance to leave a group and join a random one
+        if (sumLeft > sum || sumRight > sum) {
+            System.out.println("Group " + min + " had the lowest"
+                    + " payoff. Individual " + randomPerson + " has left that group and"
+                    + " joined group " + randomGroup);
+
+            groupArray[min][randomPerson] = false;
+
+            // See if individual is already a member of the random group
+            if (groupArray[randomGroup][randomPerson] != true && randomGroup != min) {
+                groupArray[randomGroup][randomPerson] = true;
+            }
+        } */
+        //Check the payoff array
+        for (int p = 0; p < payoffArray.length; p++) {
+            System.out.print(payoffArray[p] + " - ");
+        }
+
+        System.out.println();
+        System.out.println("Min: " + min);
+    }
+
+    /*------------------------------FOR TESTING ------------------------------*/
+    public static void searchAnIndividual() {
+        Scanner sc = new Scanner(System.in);
+        int searchIndividual = 0;
+        boolean[] memberOf = new boolean[10];
+
+        System.out.println();
+        System.out.print("Please enter an individual number to search them up :> ");
+        searchIndividual = sc.nextInt();
+
+        for (int i = 0; i < groupArray.length; i++) {
+            if (groupArray[i][searchIndividual] == true) {
+                memberOf[i] = true;
+            } else {
+                memberOf[i] = false;
             }
         }
 
-        if (sumRight > sum) {
-            if (groupArray[randomGroup][randomPerson] == true) {
-                System.out.println("Individual " + randomPerson + " is now leaving group " + randomGroup
-                        + " and joining group " + randomSecondGroup+", because the payoff of the right neighbour"
-                                + " was higher.");
-                groupArray[randomGroup][randomPerson] = false;
-                groupArray[randomSecondGroup][randomPerson] = true;
-            }
+        System.out.println("Individual " + searchIndividual + " is a " + strategyArray[searchIndividual]);
+        for (int x = 0; x < 10; x++) {
+            System.out.println("Group " + x + " = " + memberOf[x] + " - Payoff of this group = " + payoffArray[x]);
         }
+
     }
 }
